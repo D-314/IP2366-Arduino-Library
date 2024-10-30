@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include "IP2368.h"
+#include "IP2366.h"
 #include <cstring>
 
-IP2368 chip; // Initialize the chip with default I2C address
+IP2366 chip; // Initialize the chip with default I2C address
 
 void setup() {
   Serial.begin(115200); // Start the serial communication
@@ -23,20 +23,20 @@ void setup() {
   chip.enableCurrentOrPowerSettingMode(true);
   chip.enablePowerOrCurrentSetting(true);
   delay(100);
-  chip.setCurrentOrPowerSettingMode(IP2368::CurrentSettingMode::InputPower);
+  chip.setCurrentOrPowerSettingMode(IP2366::CurrentSettingMode::InputPower);
   if (chip.isPowerOrCurrentSettingEnabled())
   {
-    if (chip.getPowerOrCurrentSettingMode() == IP2368::CurrentSettingMode::InputPower) 
+    if (chip.getPowerOrCurrentSettingMode() == IP2366::CurrentSettingMode::InputPower) 
     {
       chip.setMaxInputPowerOrBatteryCurrent(60); //100W
     }
-    else if (chip.getPowerOrCurrentSettingMode() == IP2368::CurrentSettingMode::BatteryCurrent)
+    else if (chip.getPowerOrCurrentSettingMode() == IP2366::CurrentSettingMode::BatteryCurrent)
     {
       chip.setMaxInputPowerOrBatteryCurrent(5000); //5A
     }
   }
 
-  chip.setTypeCMode(IP2368::TypeCMode::UFP);
+  chip.setTypeCMode(IP2366::TypeCMode::UFP);
   
   chip.enableFullChargeVoltageSetting(true);
   chip.setFullChargeCapacity(8500);
@@ -47,40 +47,40 @@ void setup() {
 
 
 // Helper functions to convert enums to strings
-const char* toString(IP2368::BatteryType type) {
+const char* toString(IP2366::BatteryType type) {
   switch (type) {
-    case IP2368::BatteryType::LiFePO4: return "LiFePO4";
-    case IP2368::BatteryType::LiIon: return "LiIon";
+    case IP2366::BatteryType::LiFePO4: return "LiFePO4";
+    case IP2366::BatteryType::LiIon: return "LiIon";
     default: return "Unknown";
   }
 }
 
-const char* toString(IP2368::ChargeState state) {
+const char* toString(IP2366::ChargeState state) {
   switch (state) {
-    case IP2368::ChargeState::STANDBY: return "Standby";
-    case IP2368::ChargeState::TRICKLE_CHARGE: return "Trickle Charge";
-    case IP2368::ChargeState::CONSTANT_CURRENT: return "Constant Current";
-    case IP2368::ChargeState::CONSTANT_VOLTAGE: return "Constant Voltage";
-    case IP2368::ChargeState::CHARGE_WAIT: return "Charge Wait";
-    case IP2368::ChargeState::CHARGE_FULL: return "Charge Full";
-    case IP2368::ChargeState::CHARGE_TIMEOUT: return "Charge Timeout";
+    case IP2366::ChargeState::STANDBY: return "Standby";
+    case IP2366::ChargeState::TRICKLE_CHARGE: return "Trickle Charge";
+    case IP2366::ChargeState::CONSTANT_CURRENT: return "Constant Current";
+    case IP2366::ChargeState::CONSTANT_VOLTAGE: return "Constant Voltage";
+    case IP2366::ChargeState::CHARGE_WAIT: return "Charge Wait";
+    case IP2366::ChargeState::CHARGE_FULL: return "Charge Full";
+    case IP2366::ChargeState::CHARGE_TIMEOUT: return "Charge Timeout";
     default: return "Unknown";
   }
 }
 
-const char* toString(IP2368::TypeCMode mode) {
+const char* toString(IP2366::TypeCMode mode) {
   switch (mode) {
-    case IP2368::TypeCMode::UFP: return "UFP (Consumer)";
-    case IP2368::TypeCMode::DFP: return "DFP (Power Source)";
-    case IP2368::TypeCMode::DRP: return "DRP (Dual Role)";
+    case IP2366::TypeCMode::UFP: return "UFP (Consumer)";
+    case IP2366::TypeCMode::DFP: return "DFP (Power Source)";
+    case IP2366::TypeCMode::DRP: return "DRP (Dual Role)";
     default: return "Unknown";
   }
 }
 
-const char* toString(IP2368::CurrentSettingMode mode) {
+const char* toString(IP2366::CurrentSettingMode mode) {
   switch (mode) {
-    case IP2368::CurrentSettingMode::BatteryCurrent: return "Max Battery Current";
-    case IP2368::CurrentSettingMode::InputPower: return "Max Input Power";
+    case IP2366::CurrentSettingMode::BatteryCurrent: return "Max Battery Current";
+    case IP2366::CurrentSettingMode::InputPower: return "Max Input Power";
     default: return "Unknown";
   }
 }
@@ -104,7 +104,7 @@ void loop() {
            chip.isPowerOrCurrentSettingEnabled() ? "EN" : "Disabled" );
 
   // Добавление данных в буфер в зависимости от режима
-  if (chip.getPowerOrCurrentSettingMode() == IP2368::CurrentSettingMode::InputPower) {
+  if (chip.getPowerOrCurrentSettingMode() == IP2366::CurrentSettingMode::InputPower) {
     snprintf(buffer + strlen(buffer), sizeof(buffer) - strlen(buffer),
              "(%.2f W)\n",
              toString(chip.getPowerOrCurrentSettingMode()),

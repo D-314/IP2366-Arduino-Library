@@ -1,9 +1,9 @@
 #include <Wire.h>
 #define INT_PIN 2  // Change this to your desired pin
 
-#include "IP2368.h"
+#include "IP2366.h"
 
-IP2368 device;
+IP2366 device;
 
 void setup() {
   Serial.begin(9600);

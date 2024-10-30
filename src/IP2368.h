@@ -1,18 +1,18 @@
-#ifndef IP2368_H
-#define IP2368_H
+#ifndef IP2366_H
+#define IP2366_H
 
 // #include <Arduino.h>
 #include <Wire.h>
 
 #include <stdint.h>
 
-class IP2368
+class IP2366
 {
 public:
-    IP2368(uint8_t address = 0x75) : IP2368_address(address) {};
+    IP2366(uint8_t address = 0x75) : IP2366_address(address) {};
     void begin();
 
-    uint8_t IP2368_address;
+    uint8_t IP2366_address;
 
     // Enumeration for defining the charge state
     enum class ChargeState
