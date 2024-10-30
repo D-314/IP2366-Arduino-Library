@@ -5,12 +5,10 @@
 
 // System Control Registers
 #define IP2366_REG_SYS_CTL0 0x00  // Charge enable and other control settings
-#define IP2366_REG_SYS_CTL1 0x01  // Battery series settings, battery type, current setting mode
 #define IP2366_REG_SYS_CTL2 0x02  // Vset full-charge voltage setting
 #define IP2366_REG_SYS_CTL3 0x03  // Iset charge power or current setting
 #define IP2366_REG_SYS_CTL4 0x04  // Battery capacity setting
-#define IP2366_REG_SYS_CTL6 0x06  // Current battery level
-#define IP2366_REG_SYS_CTL7 0x07  // Trickle charge current, threshold and charge timeout setting
+#define IP2366_REG_SYS_CTL6 0x06  // Trickle charge current, threshold and charge timeout setting
 #define IP2366_REG_SYS_CTL8 0x08  // Stop charge current and recharge threshold setting
 #define IP2366_REG_SYS_CTL9 0x09  // Standby enable and low battery voltage settings
 #define IP2366_REG_SYS_CTL10 0x0A // Low battery voltage setting
@@ -18,6 +16,8 @@
 #define IP2366_REG_SYS_CTL12 0x0C // Output maximum power selection register
 
 // TYPE-C Control Registers
+#define IP2366_REG_SYS_CTL12 0x0C   // Output maximum power selection register
+#define IP2366_REG_SELECT_PDO 0x0D  // select charging PDO gear
 #define IP2366_REG_TypeC_CTL8 0x22  // TYPE-C mode control register
 #define IP2366_REG_TypeC_CTL9 0x23  // Output Pdo current setting register
 #define IP2366_REG_TypeC_CTL10 0x24 // 5VPdo current setting register
@@ -28,14 +28,14 @@
 #define IP2366_REG_TypeC_CTL17 0x2B // Output Pdo setting register
 #define IP2366_REG_TypeC_CTL23 0x29 // Pps1 Pdo current setting register
 #define IP2366_REG_TypeC_CTL24 0x2A // Pps2 Pdo current setting register
+#define IP2366_REG_TypeC_CTL18 0x2C // PDO plus 10mA current enable, needs to be configured together with the current setting register
 
 // Read-only Status Indication Registers
-#define IP2366_REG_SOC_CAP_DATA 0x30 // Battery percentage data register
 #define IP2366_REG_STATE_CTL0 0x31   // Charge status control register
 #define IP2366_REG_STATE_CTL1 0x32   // Charge status control register 2
 #define IP2366_REG_STATE_CTL2 0x33   // Input Pd status control register
 #define IP2366_REG_TypeC_STATE 0x34  // System status indication register
-#define IP2366_REG_MOS_STATE 0x35    // Input MOS status indication register
+#define IP2366_REG_RECEIVED_PDO 0x35 // receive PDO gear
 #define IP2366_REG_STATE_CTL3 0x38   // System over-current indication register
 
 // ADC Data Registers
@@ -43,30 +43,22 @@
 #define IP2366_REG_BATVADC_DAT1 0x51         // VBAT voltage high 8 bits
 #define IP2366_REG_VsysVADC_DAT0 0x52        // Vsys voltage low 8 bits
 #define IP2366_REG_VsysVADC_DAT1 0x53        // Vsys voltage high 8 bits
-#define IP2366_REG_IVbus_Sink_IADC_DAT0 0x54 // Input current low 8 bits
-#define IP2366_REG_IVbus_Sink_IADC_DAT1 0x55 // Input current high 8 bits
-#define IP2366_REG_IVbus_Src_IADC_DAT0 0x56  // Output current low 8 bits
-#define IP2366_REG_IVbus_Src_IADC_DAT1 0x57  // Output current high 8 bits
+#define IP2366_REG_TIMENODE1 0x69            // 1st bit of the timestamp register (the timestamp symbol is an ASCII character)
+#define IP2366_REG_TIMENODE2 0x6A            // 2nd bit of the timestamp register (the timestamp symbol is an ASCII character)
+#define IP2366_REG_TIMENODE3 0x6B            // 3rd bit of the timestamp register (the timestamp symbol is an ASCII character)
+#define IP2366_REG_TIMENODE4 0x6C            // 4th bit of the timestamp register (the timestamp symbol is an ASCII character)
+#define IP2366_REG_TIMENODE5 0x6D            // 4th bit of the timestamp register (the timestamp symbol is an ASCII character)
 #define IP2366_REG_IBATIADC_DAT0 0x6E        // BAT-end current low 8 bits
 #define IP2366_REG_IBATIADC_DAT1 0x6F        // BAT-end current high 8 bits
 #define IP2366_REG_ISYS_IADC_DAT0 0x70       // IVsys-end current low 8 bits
 #define IP2366_REG_IVsys_IADC_DAT1 0x71      // IVsys-end current high 8 bits
 #define IP2366_REG_Vsys_POW_DAT0 0x74        // Vsysterminal power low 8 bits
-#define IP2366_REG_Vsys_POW_DAT1 0x75        // Vsysterminal power mid 8 bits
-#define IP2366_REG_Vsys_POW_DAT2 0x76        // Vsysterminal power high 8 bits
+#define IP2366_REG_Vsys_POW_DAT1 0x75        // Vsysterminal power high 8 bits
 
 // Additional ADC Data Registers for NTC, GPIOs
 #define IP2366_REG_INTC_IADC_DAT0 0x77     // NTC output current setting
 #define IP2366_REG_VGPIO0_NTC_DAT0 0x78    // VGPIO0_NTC ADC voltage low 8 bits
 #define IP2366_REG_VGPIO0_NTC_DAT1 0x79    // VGPIO0_NTC ADC voltage high 8 bits
-#define IP2366_REG_VGPIO1_Iset_DAT0 0x7A   // VGPIO1_Iset ADC voltage low 8 bits
-#define IP2366_REG_VGPIO1_Iset_DAT1 0x7B   // VGPIO1_Iset ADC voltage high 8 bits
-#define IP2366_REG_VGPIO2_Vset_DAT0 0x7C   // VGPIO2_Vset ADC voltage low 8 bits
-#define IP2366_REG_VGPIO2_Vset_DAT1 0x7D   // VGPIO2_Vset ADC voltage high 8 bits
-#define IP2366_REG_VGPIO3_FCAP_DAT0 0x7E   // VGPIO3_FCAP ADC voltage low 8 bits
-#define IP2366_REG_VGPIO3_FCAP_DAT1 0x7F   // VGPIO3_FCAP ADC voltage high 8 bits
-#define IP2366_REG_VGPIO4_BATNUM_DAT0 0x80 // VGPIO4_BATNUM ADC voltage low 8 bits
-#define IP2366_REG_VGPIO4_BATNUM_DAT1 0x81 // VGPIO4_BATNUM ADC voltage high 8 bits
 
 #define ADC_TO_MV(adc_val) ((uint16_t)((((uint32_t)(adc_val) * 3300) / 0xFFFF)))
 #define TwoWire_h
@@ -159,20 +151,6 @@ bool IP2366::isChargerEnabled(uint8_t * errorCode)
     return readRegister(IP2366_REG_SYS_CTL0, errorCode) & 0x01;
 }
 
-void IP2366::enableVbusSinkCtrl(bool enable, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL0, errorCode);
-    value = setBit(value, 1, enable);
-    writeRegister(IP2366_REG_SYS_CTL0, value, errorCode);
-}
-
-bool IP2366::isVbusSinkCtrlEnabled(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return readRegister(IP2366_REG_SYS_CTL0, errorCode) & 0x02;
-}
-
 void IP2366::enableVbusSinkSCP(bool enable, uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
@@ -251,125 +229,14 @@ bool IP2366::isLoadOTPEnabled(uint8_t * errorCode)
     return readRegister(IP2366_REG_SYS_CTL0, errorCode) & 0x80;
 }
 
-// SYS_CTL1
-
-void IP2366::enableBatteryTypeSetting(bool enable, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode);
-    value = setBit(value, 3, enable);
-    writeRegister(IP2366_REG_SYS_CTL1, value, errorCode);
-}
-
-void IP2366::setBatteryType(BatteryType type, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode) & ~(1 << 2);
-
-    value |= (static_cast<uint8_t>(type) << 2);
-
-    writeRegister(IP2366_REG_SYS_CTL1, value, errorCode);
-}
-
-bool IP2366::isBatteryTypeSettingEnabled(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode);
-    return value & (1 << 3);
-}
-
-IP2366::BatteryType IP2366::getBatteryType(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode);
-    if (value & (1 << 2))
-    {
-        return BatteryType::LiIon;
-    }
-    else
-    {
-        return BatteryType::LiFePO4;
-    }
-}
-
-void IP2366::enableCurrentOrPowerSettingMode(bool enable, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode);
-    value = setBit(value, 1, enable);
-    writeRegister(IP2366_REG_SYS_CTL1, value, errorCode);
-}
-
-bool IP2366::isCurrentOrPowerSettingModeEnabled(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode);
-    return value & (1 << 1);
-}
-
-void IP2366::setCurrentOrPowerSettingMode(CurrentSettingMode mode, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode);
-    if (mode == CurrentSettingMode::BatteryCurrent)
-    {
-        value &= ~(1 << 0);
-    }
-    else
-    {
-        value |= (1 << 0);
-    }
-    writeRegister(IP2366_REG_SYS_CTL1, value, errorCode);
-}
-
-IP2366::CurrentSettingMode IP2366::getPowerOrCurrentSettingMode(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL1, errorCode);
-    if (value & (1 << 0))
-    {
-        return CurrentSettingMode::InputPower;
-    }
-    else
-    {
-        return CurrentSettingMode::BatteryCurrent;
-    }
-}
-
 // SYS_CTL2
-
-void IP2366::enableFullChargeVoltageSetting(bool enable, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL2, errorCode);
-    value = setBit(value, 7, enable);
-    writeRegister(IP2366_REG_SYS_CTL2, value, errorCode);
-}
-
-bool IP2366::isFullChargeVoltageSettingEnabled(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL2, errorCode);
-    return (value & (1 << 7)) != 0;
-}
 
 void IP2366::setFullChargeVoltage(uint16_t voltage, uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-
-    BatteryType batteryType = getBatteryType();
-
     uint16_t minVoltage, maxVoltage;
-    if (batteryType == BatteryType::LiIon)
-    {
-        minVoltage = 4000;
-        maxVoltage = 4400;
-    }
-    else
-    {
-        minVoltage = 3500;
-        maxVoltage = 3700;
-    }
+    minVoltage = 2500;
+    maxVoltage = 4400;
 
     if (voltage < minVoltage)
         voltage = minVoltage;
@@ -384,198 +251,49 @@ uint16_t IP2366::getFullChargeVoltage(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
     uint8_t regValue = readRegister(IP2366_REG_SYS_CTL2, errorCode);
-    BatteryType batteryType = getBatteryType();
 
-    uint16_t baseVoltage = (batteryType == BatteryType::LiIon) ? 4000 : 3500;
+    uint16_t baseVoltage = 2500;
 
     return baseVoltage + regValue * 10;
 }
 
 // SYS_CTL3
 
-void IP2366::enablePowerOrCurrentSetting(bool enable, uint8_t * errorCode)
+void IP2366::setMaxInputPowerOrBatteryCurrent(uint16_t current_mA, uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL3, errorCode);
-    value = setBit(value, 7, enable);
-    writeRegister(IP2366_REG_SYS_CTL3, value, errorCode);
-}
-
-bool IP2366::isPowerOrCurrentSettingEnabled(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t value = readRegister(IP2366_REG_SYS_CTL3, errorCode);
-    return (value & (1 << 7)) != 0;
-}
-
-void IP2366::setMaxInputPowerOrBatteryCurrent(uint16_t value, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    bool isPowerMode = getPowerOrCurrentSettingMode() == CurrentSettingMode::InputPower;
     uint8_t regValue;
+    uint16_t maxCurrent = 9700;
+    if (current > maxCurrent)
+        current = maxCurrent;
 
-    if (isPowerMode)
-    {
-        uint16_t maxPower = 100;
-        if (value > maxPower)
-            value = maxPower;
+    regValue = current / 100;
 
-        regValue = value;
-    }
-    else
-    {
-        uint16_t maxCurrent = 5000;
-        if (value > maxCurrent)
-            value = maxCurrent;
-
-        regValue = value / 100;
-    }
-
-    writeRegister(IP2366_REG_SYS_CTL3, regValue & 0x7F, errorCode);
+    writeRegister(IP2366_REG_SYS_CTL3, regValue, errorCode);
 }
 
 uint16_t IP2366::getMaxInputPowerOrBatteryCurrent(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL3, errorCode) & 0x7F;
-    bool isPowerMode = getPowerOrCurrentSettingMode() == CurrentSettingMode::InputPower;
+    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL3, errorCode);
 
-    if (isPowerMode)
-    {
-        return regValue;
-    }
-    else
-    {
-        return regValue * 100;
-    }
-}
-
-// SYS_CTL4
-
-void IP2366::enableFullChargeCapacitySetting(bool enable, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL4, errorCode);
-    regValue = setBit(regValue, 7, enable);
-    writeRegister(IP2366_REG_SYS_CTL4, regValue, errorCode);
-}
-
-bool IP2366::isFullChargeCapacitySettingEnabled(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL4, errorCode);
-    return (regValue & (1 << 7)) != 0;
-}
-
-void IP2366::setFullChargeCapacity(uint16_t capacity, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t maxCapacityRegisterValue = 0x7F;
-    uint16_t maxCapacitymAh = maxCapacityRegisterValue * 200;
-
-    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL4, errorCode) & ~maxCapacityRegisterValue;
-
-    if (capacity > maxCapacitymAh)
-    {
-        capacity = maxCapacitymAh;
-    }
-
-    regValue |= (capacity / 200) & maxCapacityRegisterValue;
-
-    writeRegister(IP2366_REG_SYS_CTL4, regValue & 0x7F, errorCode);
-}
-
-uint16_t IP2366::getFullChargeCapacity(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL4, errorCode) & 0x7F;
-    return regValue * 200;
+    return regValue * 100;
 }
 
 // SYS_CTL6
-
-void IP2366::setCurrentBatteryCapacity(uint8_t capacity, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    writeRegister(IP2366_REG_SYS_CTL6, capacity, errorCode);
-}
-
-uint8_t IP2366::getCurrentBatteryCapacity(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return readRegister(IP2366_REG_SYS_CTL6, errorCode);
-}
-
-// SYS_CTL7
 
 void IP2366::setTrickleChargeCurrent(uint16_t current, uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
     uint8_t regValue = current / 50;
-    if (regValue > 0xF)
-    {
-        regValue = 0xF;
-    }
-
-    uint8_t currentValue = readRegister(IP2366_REG_SYS_CTL7, errorCode) & 0x0F;
-    writeRegister(IP2366_REG_SYS_CTL7, (regValue << 4 | currentValue), errorCode);
+    writeRegister(IP2366_REG_SYS_CTL6, regValue, errorCode);
 }
 
 uint16_t IP2366::getTrickleChargeCurrent(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t regValue = (readRegister(IP2366_REG_SYS_CTL7, errorCode) >> 4) & 0x0F;
+    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL6, errorCode);
     return static_cast<uint16_t>(regValue * 50);
-}
-
-void IP2366::setTrickleChargeVoltage(uint16_t voltage_mV, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    BatteryType batteryType = getBatteryType();
-    uint8_t voltageSetting;
-
-    uint16_t baseVoltage = (batteryType == BatteryType::LiFePO4) ? 2300 : 2800;
-    uint16_t stepVoltage = 100;
-
-    if (voltage_mV < baseVoltage)
-    {
-        voltage_mV = baseVoltage;
-    }
-    else if (voltage_mV > baseVoltage + stepVoltage * 3)
-    {
-        voltage_mV = baseVoltage + stepVoltage * 3;
-    }
-
-    voltageSetting = (voltage_mV - baseVoltage) / stepVoltage;
-
-    uint8_t currentValue = readRegister(IP2366_REG_SYS_CTL7, errorCode) & 0xF3;
-    writeRegister(IP2366_REG_SYS_CTL7, (voltageSetting << 2 | currentValue), errorCode);
-}
-
-uint16_t IP2366::getTrickleChargeVoltage(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    BatteryType batteryType = getBatteryType();
-    uint8_t voltageSetting = (readRegister(IP2366_REG_SYS_CTL7, errorCode) >> 2) & 0x03;
-
-    uint16_t baseVoltage = (batteryType == BatteryType::LiFePO4) ? 2300 : 2800;
-    return baseVoltage + voltageSetting * 100;
-}
-
-void IP2366::setChargeTimeout(ChargeTimeout timeout, uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t timeoutSetting = static_cast<uint8_t>(timeout);
-
-    uint8_t currentValue = readRegister(IP2366_REG_SYS_CTL7, errorCode) & 0xFC;
-    writeRegister(IP2366_REG_SYS_CTL7, ( timeoutSetting | currentValue ), errorCode);
-}
-
-IP2366::ChargeTimeout IP2366::getChargeTimeout(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    uint8_t regValue = readRegister(IP2366_REG_SYS_CTL7, errorCode) & 0x03;
-    return static_cast<ChargeTimeout>(regValue);
 }
 
 // SYS_CTL8
@@ -639,7 +357,7 @@ bool IP2366::isStandbyModeEnabled(uint8_t * errorCode)
     return readRegister(IP2366_REG_SYS_CTL9, errorCode) & (1 << 7);
 }
 
-void IP2366::enableBATlowSet(bool enable, uint8_t * errorCode)
+void IP2366::Standby(bool enable, uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
     uint8_t value = readRegister(IP2366_REG_SYS_CTL9, errorCode);
@@ -647,7 +365,7 @@ void IP2366::enableBATlowSet(bool enable, uint8_t * errorCode)
     writeRegister(IP2366_REG_SYS_CTL9, value, errorCode);
 }
 
-bool IP2366::isBATlowSetEnabled(uint8_t * errorCode)
+bool IP2366::isStandby(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
     return readRegister(IP2366_REG_SYS_CTL9, errorCode) & (1 << 6);
@@ -672,11 +390,10 @@ bool IP2366::isBATLowEnabled(uint8_t * errorCode)
 void IP2366::setLowBatteryVoltage(uint16_t voltage_mV, uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    BatteryType batteryType = getBatteryType();
     uint8_t voltageSetting;
     uint16_t stepVoltage = 100;
 
-    uint16_t baseVoltage = (batteryType == BatteryType::LiFePO4) ? 2300 : 2800;
+    uint16_t baseVoltage = 2500;
 
     if (voltage_mV < baseVoltage)
     {
@@ -696,10 +413,9 @@ void IP2366::setLowBatteryVoltage(uint16_t voltage_mV, uint8_t * errorCode)
 uint16_t IP2366::getLowBatteryVoltage(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    BatteryType batteryType = getBatteryType();
     uint8_t voltageSetting = (readRegister(IP2366_REG_SYS_CTL10, errorCode) >> 5) & 0x03;
 
-    uint16_t baseVoltage = (batteryType == BatteryType::LiFePO4) ? 2300 : 2800;
+    uint16_t baseVoltage = 2500;
     return baseVoltage + voltageSetting * 100;
 }
 
@@ -751,6 +467,21 @@ IP2366::Vbus1OutputPower IP2366::getMaxOutputPower(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
     return static_cast<Vbus1OutputPower>((readRegister(IP2366_REG_SYS_CTL12, errorCode) >> 5) & 0x03); 
+}
+
+// SELECT_PDO
+
+void IP2366::setChargingPDOmode(ChargingPDOmode mode, uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    uint8_t currentValue = readRegister(IP2366_REG_SYS_CTL10, errorCode) & 0xF8;
+    writeRegister(IP2366_REG_SELECT_PDO, ((static_cast<uint8_t>(mode) | currentValue), errorCode);
+}
+
+IP2366::ChargingPDOmode IP2366::getChargingPDOmode(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return static_cast<ChargingPDOmode>(readRegister(IP2366_REG_SELECT_PDO, errorCode) & 0x03);
 }
 
 // TypeC_CTL8
@@ -986,19 +717,50 @@ bool IP2366::isSrcPps2PdoEnabled(uint8_t * errorCode)
     return readRegister(IP2366_REG_TypeC_CTL17, errorCode) & (1 << 6);
 }
 
-// SOC_CAP_DATA
+// TypeC_CTL18
 
-uint8_t IP2366::getBatteryPercentage(uint8_t * errorCode)
+void IP2366::enableSrcPdoAdd10mA(bool en5VPdoAdd10mA, bool en9VPdoAdd10mA, bool en12VPdoAdd10mA, bool en15VPdoAdd10mA, bool en20VPdoAdd10mA, uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return readRegister(IP2366_REG_SOC_CAP_DATA, errorCode);
+    uint8_t value = readRegister(IP2366_REG_TypeC_CTL18, errorCode);
+    value = setBit(value, 4, en20VPdoAdd10mA);
+    value = setBit(value, 3, en15VPdoAdd10mA);
+    value = setBit(value, 2, en12VPdoAdd10mA);
+    value = setBit(value, 1, en9VPdoAdd10mA);
+    value = setBit(value, 0, en5VPdoAdd10mA);
+    writeRegister(IP2366_REG_TypeC_CTL18, value, errorCode);
 }
 
-void IP2366::setBatteryPercentage(uint8_t battery_level, uint8_t * errorCode)
+bool IP2366::isSrcPdoAdd10mA5VEnabled(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    writeRegister(IP2366_REG_SOC_CAP_DATA, battery_level, errorCode);
+    return readRegister(IP2366_REG_TypeC_CTL18, errorCode) & (1 << 0);
 }
+
+bool IP2366::isSrcPdoAdd10mA9VEnabled(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_TypeC_CTL18, errorCode) & (1 << 1);
+}
+
+bool IP2366::isSrcPdoAdd10mA12VEnabled(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_TypeC_CTL18, errorCode) & (1 << 2);
+}
+
+bool IP2366::isSrcPdoAdd10mA15VEnabled(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_TypeC_CTL18, errorCode) & (1 << 3);
+}
+
+bool IP2366::isSrcPdoAdd10mA20VEnabled(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_TypeC_CTL18, errorCode) & (1 << 4);
+}
+
 
 // STATE_CTL0
 
@@ -1124,12 +886,36 @@ bool IP2366::isVbusSrcQcActive(uint8_t * errorCode)
     return readRegister(IP2366_REG_TypeC_STATE, errorCode) & (1 << 2);
 }
 
-// MOS_STATE
+// RECEIVED_PDO
 
-bool IP2366::isVbusMosStateOpen(uint8_t * errorCode)
+bool IP2366::isReceives5VPdo(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return readRegister(IP2366_REG_MOS_STATE, errorCode) & (1 << 6);
+    return readRegister(IP2366_REG_RECEIVED_PDO, errorCode) & (1 << 0);
+}
+
+bool IP2366::isReceives9VPdo(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_RECEIVED_PDO, errorCode) & (1 << 1);
+}
+
+bool IP2366::isReceives12VPdo(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_RECEIVED_PDO, errorCode) & (1 << 2);
+}
+
+bool IP2366::isReceives15VPdo(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_RECEIVED_PDO, errorCode) & (1 << 3);
+}
+
+bool IP2366::isReceives20VPdo(uint8_t * errorCode)
+{
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    return readRegister(IP2366_REG_RECEIVED_PDO, errorCode) & (1 << 4);
 }
 
 // STATE_CTL3
@@ -1146,6 +932,16 @@ bool IP2366::isVsysSdortCircuitDt(uint8_t * errorCode)
     return readRegister(IP2366_REG_STATE_CTL3, errorCode) & (1 << 4);
 }
 
+// TIMENODE
+
+void IP2366::getTimenode(char timenode[5], uint8_t * errorCode) {
+    if (errorCode != nullptr) *errorCode = 0; // reset error code
+    for (uint8_t i = 0; i < 5; i++)
+    {
+        timenode[i] = readRegister((IP2366_REG_TIMENODE1+i), errorCode);
+    }
+}
+
 // ADC
 
 uint16_t IP2366::getVBATVoltage(uint8_t * errorCode)
@@ -1158,18 +954,6 @@ uint16_t IP2366::getVsysVoltage(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
     return (((uint16_t)readRegister(IP2366_REG_VsysVADC_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_VsysVADC_DAT0, errorCode));
-}
-
-uint16_t IP2366::getChargeInputCurrent(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return (((uint16_t)readRegister(IP2366_REG_IVbus_Sink_IADC_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_IVbus_Sink_IADC_DAT0, errorCode));
-}
-
-uint16_t IP2366::getDischargeOutputCurrent(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return (((uint16_t)readRegister(IP2366_REG_IVbus_Src_IADC_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_IVbus_Src_IADC_DAT0, errorCode));
 }
 
 uint16_t IP2366::getBATCurrent(uint8_t * errorCode)
@@ -1187,7 +971,7 @@ uint16_t IP2366::getVsysCurrent(uint8_t * errorCode)
 uint32_t IP2366::getVsysPower(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return (((uint32_t)readRegister(IP2366_REG_Vsys_POW_DAT2, errorCode) << 16) | ((uint32_t)readRegister(IP2366_REG_Vsys_POW_DAT1, errorCode) << 8) | (uint32_t)readRegister(IP2366_REG_Vsys_POW_DAT0, errorCode));
+    return (((uint32_t)readRegister(IP2366_REG_Vsys_POW_DAT1, errorCode) << 8) | (uint32_t)readRegister(IP2366_REG_Vsys_POW_DAT0, errorCode));
 }
 
 bool IP2366::isOverHeat(uint8_t * errorCode)
@@ -1202,28 +986,4 @@ uint16_t IP2366::getNTCVoltage(uint8_t * errorCode)
 {
     if (errorCode != nullptr) *errorCode = 0; // reset error code
     return ADC_TO_MV(((uint16_t)readRegister(IP2366_REG_VGPIO0_NTC_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_VGPIO0_NTC_DAT0, errorCode));
-}
-
-uint16_t IP2366::getCurrentSettingVoltage(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return ADC_TO_MV(((uint16_t)readRegister(IP2366_REG_VGPIO1_Iset_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_VGPIO1_Iset_DAT0, errorCode));
-}
-
-uint16_t IP2366::getVoltageSettingVoltage(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return ADC_TO_MV(((uint16_t)readRegister(IP2366_REG_VGPIO2_Vset_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_VGPIO2_Vset_DAT0, errorCode));
-}
-
-uint16_t IP2366::getFCAPVoltage(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return ADC_TO_MV(((uint16_t)readRegister(IP2366_REG_VGPIO3_FCAP_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_VGPIO3_FCAP_DAT0, errorCode));
-}
-
-uint16_t IP2366::getBatteryCountVoltage(uint8_t * errorCode)
-{
-    if (errorCode != nullptr) *errorCode = 0; // reset error code
-    return ADC_TO_MV(((uint16_t)readRegister(IP2366_REG_VGPIO4_BATNUM_DAT1, errorCode) << 8) | (uint16_t)readRegister(IP2366_REG_VGPIO4_BATNUM_DAT0, errorCode));
 }

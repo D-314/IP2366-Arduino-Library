@@ -15,9 +15,6 @@ void loop() {
   digitalWrite(INT_PIN, HIGH); // Keep awake
   delay(110);
 
-  Serial.print("Battery Percentage [%]: ");
-  Serial.println(device.getBatteryPercentage());
-
   Serial.print("Battery Voltage [mV]: ");
   Serial.println(device.getVBATVoltage());
 

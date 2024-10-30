@@ -26,20 +26,6 @@ public:
         CHARGE_TIMEOUT = 6
     };
 
-    // Enumeration for defining the type of battery
-    enum class BatteryType
-    {
-        LiFePO4 = 0, // Lithium iron phosphate batteries
-        LiIon = 1    // Lithium ion batteries
-    };
-
-    // Enumeration for defining the current setting mode
-    enum class CurrentSettingMode
-    {
-        BatteryCurrent = 0, // Setting the battery current
-        InputPower = 1      // Setting the input power
-    };
-
     // Enumeration for defining the USB Type-C operating mode
     enum class TypeCMode
     {
@@ -51,12 +37,22 @@ public:
     // Enumeration for selecting Vbus1 output power
     enum class Vbus1OutputPower
     {
-        W20 = 0,
-        W25 = 1,
-        W30 = 2,
-        W45 = 3,
-        W60 = 4,
-        W100 = 5
+        W30 = 0,
+        W45 = 1,
+        W60 = 2,
+        W65 = 3,
+        W100 = 4,
+        W140 = 5
+    };
+
+    // Enumeration for selecting charging PDO mode
+    enum class ChargingPDOmode
+    {
+        V5 = 0,
+        V9 = 1,
+        V12 = 2,
+        V15 = 3,
+        V20 = 4
     };
 
     // Enumeration for setting the charge timeout
@@ -74,33 +70,15 @@ public:
     // SYS_CTL0
 
     bool isChargerEnabled(uint8_t * errorCode = nullptr);
-    bool isVbusSinkCtrlEnabled(uint8_t * errorCode = nullptr);
     bool isVbusSinkSCPEnabled(uint8_t * errorCode = nullptr);
     bool isVbusSinkPDEnabled(uint8_t * errorCode = nullptr);
     bool isVbusSinkDPdMEnabled(uint8_t * errorCode = nullptr);
     bool isINTLowEnabled(uint8_t * errorCode = nullptr);
     bool isLoadOTPEnabled(uint8_t * errorCode = nullptr);
 
-    // SYS_CTL1
-
-    bool isBatteryTypeSettingEnabled(uint8_t * errorCode = nullptr);
-    bool isCurrentOrPowerSettingModeEnabled(uint8_t * errorCode = nullptr);
-
-    // SYS_CTL2
-
-    bool isFullChargeVoltageSettingEnabled(uint8_t * errorCode = nullptr);
-
-    // SYS_CTL3
-
-    bool isPowerOrCurrentSettingEnabled(uint8_t * errorCode = nullptr);
-
-    // SYS_CTL4
-
-    bool isFullChargeCapacitySettingEnabled(uint8_t * errorCode = nullptr);
-
     // SYS_CTL9
     bool isStandbyModeEnabled(uint8_t * errorCode = nullptr);
-    bool isBATlowSetEnabled(uint8_t * errorCode = nullptr);
+    bool isStandby(uint8_t * errorCode = nullptr);
     bool isBATLowEnabled(uint8_t * errorCode = nullptr);
 
     // SYS_CTL11
@@ -130,6 +108,14 @@ public:
     bool isSrcPps1PdoEnabled(uint8_t * errorCode = nullptr);
     bool isSrcPps2PdoEnabled(uint8_t * errorCode = nullptr);
 
+    // TypeC_CTL18
+
+    bool isSrcPdoAdd10mA5VEnabled(uint8_t * errorCode = nullptr);
+    bool isSrcPdoAdd10mA9VEnabled(uint8_t * errorCode = nullptr);
+    bool isSrcPdoAdd10mA12VEnabled(uint8_t * errorCode = nullptr);
+    bool isSrcPdoAdd10mA15VEnabled(uint8_t * errorCode = nullptr);
+    bool isSrcPdoAdd10mA20VEnabled(uint8_t * errorCode = nullptr);
+
     // STATE_CTL0
 
     bool isCharging(uint8_t * errorCode = nullptr);
@@ -154,8 +140,13 @@ public:
     bool isVbusSinkQcActive(uint8_t * errorCode = nullptr);
     bool isVbusSrcQcActive(uint8_t * errorCode = nullptr);
 
-    // MOS_STATE
-    bool isVbusMosStateOpen(uint8_t * errorCode = nullptr);
+    // RECEIVED_PDO
+
+    bool isReceives5VPdo(uint8_t * errorCode);
+    bool isReceives9VPdo(uint8_t * errorCode);
+    bool isReceives12VPdo(uint8_t * errorCode);
+    bool isReceives15VPdo(uint8_t * errorCode);
+    bool isReceives20VPdo(uint8_t * errorCode);
 
     // STATE_CTL3
 
@@ -169,46 +160,25 @@ public:
 
     // SYS_CTL0
 
-    void enableCharger(bool enable, uint8_t * errorCode = nullptr);
-    void enableVbusSinkCtrl(bool enable, uint8_t * errorCode = nullptr);
-    void enableVbusSinkSCP(bool enable, uint8_t * errorCode = nullptr);
-    void enableVbusSinkPD(bool enable, uint8_t * errorCode = nullptr);
-    void enableVbusSinkDPdM(bool enable, uint8_t * errorCode = nullptr);
-    void enableINTLow(bool enable, uint8_t * errorCode = nullptr);
-    void ResetMCU(bool enable, uint8_t * errorCode = nullptr);
-    void enableLoadOTP(bool enable, uint8_t * errorCode = nullptr);
-
-    // SYS_CTL1
-
-    void enableBatteryTypeSetting(bool enable, uint8_t * errorCode = nullptr);
-    void setBatteryType(BatteryType type, uint8_t * errorCode = nullptr);
-    void enableCurrentOrPowerSettingMode(bool enable, uint8_t * errorCode = nullptr);
-    void setCurrentOrPowerSettingMode(CurrentSettingMode mode, uint8_t * errorCode = nullptr);
+    void enableCharger(bool enable = true, uint8_t * errorCode = nullptr);
+    void enableVbusSinkSCP(bool enable = true, uint8_t * errorCode = nullptr);
+    void enableVbusSinkPD(bool enable = true, uint8_t * errorCode = nullptr);
+    void enableVbusSinkDPdM(bool enable = true, uint8_t * errorCode = nullptr);
+    void enableINTLow(bool enable = true, uint8_t * errorCode = nullptr);
+    void ResetMCU(bool enable = true, uint8_t * errorCode = nullptr);
+    void enableLoadOTP(bool enable = true, uint8_t * errorCode = nullptr);
 
     // SYS_CTL2
 
     void setFullChargeVoltage(uint16_t voltage, uint8_t * errorCode = nullptr);
-    void enableFullChargeVoltageSetting(bool enable, uint8_t * errorCode = nullptr);
 
     // SYS_CTL3
 
-    void enablePowerOrCurrentSetting(bool enable, uint8_t * errorCode = nullptr);
-    void setMaxInputPowerOrBatteryCurrent(uint16_t value, uint8_t * errorCode = nullptr);
-
-    // SYS_CTL4
-
-    void enableFullChargeCapacitySetting(bool enable, uint8_t * errorCode = nullptr);
-    void setFullChargeCapacity(uint16_t capacity, uint8_t * errorCode = nullptr);
+    void setMaxInputPowerOrBatteryCurrent(uint16_t current_mA, uint8_t * errorCode = nullptr);
 
     // SYS_CTL6
 
-    void setCurrentBatteryCapacity(uint8_t capacity, uint8_t * errorCode = nullptr);
-
-    // SYS_CTL7
-
     void setTrickleChargeCurrent(uint16_t current, uint8_t * errorCode = nullptr);
-    void setTrickleChargeVoltage(uint16_t voltage_mv, uint8_t * errorCode = nullptr);
-    void setChargeTimeout(ChargeTimeout timeout, uint8_t * errorCode = nullptr);
 
     // SYS_CTL8
 
@@ -217,9 +187,9 @@ public:
 
     // SYS_CTL9
 
-    void enableStandbyMode(bool enable, uint8_t * errorCode = nullptr);
-    void enableBATlowSet(bool enable, uint8_t * errorCode = nullptr);
-    void enableBATLow(bool enable, uint8_t * errorCode = nullptr);
+    void enableStandbyMode(bool enable = true, uint8_t * errorCode = nullptr);
+    void Standby(bool enable = true, uint8_t * errorCode = nullptr);
+    void enableBATLow(bool enable = true, uint8_t * errorCode = nullptr);
 
     // SYS_CTL10
 
@@ -227,11 +197,15 @@ public:
 
     // SYS_CTL11
 
-    void setOutputFeatures(bool enableDcDcOutput, bool enableVbusSrcDPdM, bool enableVbusSrcPd, bool enableVbusSrcSCP, uint8_t * errorCode = nullptr);
+    void setOutputFeatures(bool enable = trueDcDcOutput, bool enable = trueVbusSrcDPdM, bool enable = trueVbusSrcPd, bool enable = trueVbusSrcSCP, uint8_t * errorCode = nullptr);
 
     // SYS_CTL12
 
     void setMaxOutputPower(Vbus1OutputPower power, uint8_t * errorCode = nullptr);
+
+    // SELECT_PDO
+
+    void setChargingPDOmode(ChargingPDOmode mode, uint8_t * errorCode);
 
     // TypeC_CTL8
     void setTypeCMode(TypeCMode mode, uint8_t * errorCode = nullptr);
@@ -259,16 +233,11 @@ public:
 
     void enableSrcPdo(bool en9VPdo, bool en12VPdo, bool en15VPdo, bool en20VPdo, bool enPps1Pdo, bool enPps2Pdo, uint8_t * errorCode = nullptr);
 
-    // SOC_CAP_DATA
+    // TypeC_CTL18
 
-    void setBatteryPercentage(uint8_t battery_level, uint8_t * errorCode = nullptr);
+    void enableSrcPdoAdd10mA(bool en5VPdoAdd10mA, bool en9VPdoAdd10mA, bool en12VPdoAdd10mA, bool en15VPdoAdd10mA, bool en20VPdoAdd10mA, uint8_t * errorCode);
 
     ///////// GET ////////
-
-    // SYS_CTL1
-
-    BatteryType getBatteryType(uint8_t * errorCode = nullptr);
-    CurrentSettingMode getPowerOrCurrentSettingMode(uint8_t * errorCode = nullptr);
 
     // SYS_CTL2
 
@@ -278,19 +247,9 @@ public:
 
     uint16_t getMaxInputPowerOrBatteryCurrent(uint8_t * errorCode = nullptr);
 
-    // SYS_CTL4
-
-    uint16_t getFullChargeCapacity(uint8_t * errorCode = nullptr);
-
     // SYS_CTL6
 
-    uint8_t getCurrentBatteryCapacity(uint8_t * errorCode = nullptr);
-
-    // SYS_CTL7
-
     uint16_t getTrickleChargeCurrent(uint8_t * errorCode = nullptr);
-    uint16_t getTrickleChargeVoltage(uint8_t * errorCode = nullptr);
-    ChargeTimeout getChargeTimeout(uint8_t * errorCode = nullptr);
 
     // SYS_CTL8
 
@@ -304,6 +263,10 @@ public:
     // SYS_CTL12
 
     Vbus1OutputPower getMaxOutputPower(uint8_t * errorCode = nullptr);
+
+    // SELECT_PDO
+
+    ChargingPDOmode getChargingPDOmode(uint8_t * errorCode);
 
     // TypeC_CTL8
 
@@ -322,22 +285,20 @@ public:
     uint16_t getPDOCurrentPPS1(uint8_t * errorCode = nullptr);
     uint16_t getPDOCurrentPPS2(uint8_t * errorCode = nullptr);
 
-    // SOC_CAP_DATA
-
-    uint8_t getBatteryPercentage(uint8_t * errorCode = nullptr);
-
     // STATE_CTL0
 
     ChargeState getChargeState(uint8_t * errorCode = nullptr);
 
     uint8_t getChargeVoltage(uint8_t * errorCode = nullptr);
 
+    // TIMENODE
+
+    void getTimenode(char timenode[5], uint8_t * errorCode);
+
     // ADC
 
     uint16_t getVBATVoltage(uint8_t * errorCode = nullptr);
     uint16_t getVsysVoltage(uint8_t * errorCode = nullptr);
-    uint16_t getChargeInputCurrent(uint8_t * errorCode = nullptr);
-    uint16_t getDischargeOutputCurrent(uint8_t * errorCode = nullptr);
     uint16_t getBATCurrent(uint8_t * errorCode = nullptr);
     uint16_t getVsysCurrent(uint8_t * errorCode = nullptr);
     uint32_t getVsysPower(uint8_t * errorCode = nullptr);
@@ -345,15 +306,11 @@ public:
     // GPIO
 
     uint16_t getNTCVoltage(uint8_t * errorCode = nullptr);
-    uint16_t getCurrentSettingVoltage(uint8_t * errorCode = nullptr);
-    uint16_t getVoltageSettingVoltage(uint8_t * errorCode = nullptr);
-    uint16_t getFCAPVoltage(uint8_t * errorCode = nullptr);
-    uint16_t getBatteryCountVoltage(uint8_t * errorCode = nullptr);
 
 private:
     uint8_t writeRegister(uint8_t regAddress, uint8_t value, uint8_t * errorCode = nullptr);
     uint8_t readRegister(uint8_t regAddress, uint8_t * errorCode = nullptr);
-    inline uint8_t setBit(uint8_t value, uint8_t bit, bool enable);
+    inline uint8_t setBit(uint8_t value, uint8_t bit, bool enable = true);
     void writeTypeCCurrentSetting(uint8_t reg, uint16_t current_mA, uint16_t step, uint16_t maxCurrent, uint8_t * errorCode = nullptr);
 };
 
